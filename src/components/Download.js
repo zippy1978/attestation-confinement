@@ -37,9 +37,10 @@ export default function Download(props) {
           Votre attestation est prête !<br/>
           Utilisez le bouton ci-dessous pour la télécharger.
         </Typography>
-        <PDFDownloadLink className={classes.downloadLink} document={<OutputDocument params={props.params}/>} fileName="somename.pdf">
+        <PDFDownloadLink className={classes.downloadLink} document={<OutputDocument params={props.params}/>} fileName="attestation-covide.pdf">
           {({ blob, url, loading, error }) => (loading ? <CircularProgress /> : <Button startIcon={<DownloadIcon />} variant="contained" color="primary">Télécharger</Button>)}
         </PDFDownloadLink>
+        <Button onClick={props.onBack}>Recommencer</Button>
       </div>
     );
   }

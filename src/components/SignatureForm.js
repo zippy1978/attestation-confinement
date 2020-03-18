@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import 'date-fns';
 import SignatureCanvas from 'react-signature-canvas';
-import { Typography, TextField } from '@material-ui/core';
+import { Typography, TextField, Button } from '@material-ui/core';
 import DateFnsUtils from '@date-io/date-fns';
 import {
   MuiPickersUtilsProvider,
@@ -14,7 +14,12 @@ import frLocale from "date-fns/locale/fr";
 
 const useStyles = makeStyles(theme => ({
     root: {
-        
+        display: 'flex',
+        flexDirection: 'column',
+        alignContent: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
     },
     signature: {
         borderWidth: '1px',
@@ -66,13 +71,14 @@ export default function SignatureForm(props) {
     }
 
     return (
-      <div>
+      <div className={classes.root}>
         <Typography variant="body1" component="h6">Signature</Typography>
         <SignatureCanvas penColor='black'
             ref={(ref) => { setSigCanvas(ref) }}
             canvasProps={{width: window.innerWidth - 32, height: 200, className: classes.signature}} 
             onEnd={() => {setSignature(sigCanvas.toDataURL('image/png'))}}
         />
+        <Button color="primary" onClick={() => {sigCanvas.clear()}}>Effacer</Button>
         <form className={classes.root} noValidate autoComplete="off">
             <TextField required 
                     className={classes.textField} 
