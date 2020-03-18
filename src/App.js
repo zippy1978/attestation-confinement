@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 //import logo from './logo.svg';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import './App.css';
 import { purple, green } from '@material-ui/core/colors';
 import Main from './containers/Main';
+import Welcome from './containers/Welcome';
 
 
 const theme = createMuiTheme({
@@ -17,10 +18,11 @@ const theme = createMuiTheme({
 });
 
 export default function App() {
+  const [conditionsAccepted, setConditionsAccepted] = useState(false);
   
   return (
     <ThemeProvider theme={theme}>
-      <Main/>
+      {conditionsAccepted ? <Main/> : <Welcome onAccepted={() => {setConditionsAccepted(true)}}/>}
     </ThemeProvider>
   );
 }
