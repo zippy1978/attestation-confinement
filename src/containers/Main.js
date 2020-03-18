@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 //import logo from './logo.svg';
 import { makeStyles } from '@material-ui/core/styles';
 import { Step, StepLabel, Stepper, Typography, Button, Grid } from '@material-ui/core';
 import IdentityForm from '../components/IdentityForm';
 import ReasonForm from '../components/ReasonForm';
 import SignatureForm from '../components/SignatureForm';
-import PDFGeneration from '../components/Download';
 import Download from '../components/Download';
+import { format } from 'date-fns';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -58,6 +58,7 @@ const useStyles = makeStyles(theme => ({
     const [readyForNextStep, setReadyForNextStep] = useState(false);
     const steps = getSteps();
 
+    const [loaded, setLoaded] = useState(false);
     const [firstname, setFirstname] = useState("");
     const [lastname, setLastname] = useState("");
     const [dateOfBirth, setDateOfBirth] = useState(null);
@@ -66,6 +67,35 @@ const useStyles = makeStyles(theme => ({
     const [signature, setSignature] = useState(null);
     const [place, setPlace] = useState("");
     const [signatureDate, setSignatureDate] = useState(null);
+
+    useEffect(() => {
+        if (!loaded) {
+            loadState();
+            setLoaded(true);
+        }
+      });
+
+    const loadState = () => {
+        setFirstname(localStorage.getItem('firstname') || '');
+        setLastname(localStorage.getItem('lastname') || '');
+        setDateOfBirth(new Date(localStorage.getItem('dateOfBirth')) || null);
+        setAddress(localStorage.getItem('address') || '');
+        setReason(localStorage.getItem('reason') || '#1');
+        setSignature(localStorage.getItem('signature') || null);
+        setPlace(localStorage.getItem('place') || '');
+        setSignatureDate(new Date(localStorage.getItem('signatureDate')) || null);
+    }
+
+    const saveState = () => {
+        localStorage.setItem('firstname', firstname);
+        localStorage.setItem('lastname', lastname);
+        localStorage.setItem('dateOfBirth', dateOfBirth);
+        localStorage.setItem('address', address);
+        localStorage.setItem('reason', reason);
+        localStorage.setItem('signature', signature);
+        localStorage.setItem('place', place);
+        localStorage.setItem('signatureDate', signatureDate);
+    }
 
     const getStepContent = step => {
         switch (step) {
@@ -114,6 +144,7 @@ const useStyles = makeStyles(theme => ({
   
     const handleNext = () => {
         setActiveStep(prevActiveStep => prevActiveStep + 1);
+        saveState();
         setReadyForNextStep(false);
     };
   
@@ -150,7 +181,7 @@ const useStyles = makeStyles(theme => ({
                         <Download params={{firstname, lastname, dateOfBirth, address, signature, reason, place, signatureDate}}/>
                     ) : (
                         <div>
-                            {getStepContent(activeStep)}
+                            {loaded ? getStepContent(activeStep) : ''}
                             <div className={classes.buttons}>
                                 <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
                                     Retour
