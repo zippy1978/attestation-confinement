@@ -147,7 +147,7 @@ const useStyles = makeStyles(theme => ({
             <Grid container spacing={2} direction='column' className={classes.content}>
                 <Grid item xs={12}>
                     {activeStep === steps.length ? (
-                        <Download params={{firstname, lastname, dateOfBirth, address, signature}}/>
+                        <Download params={{firstname, lastname, dateOfBirth, address, signature, reason, place, signatureDate}}/>
                     ) : (
                         <div>
                             {getStepContent(activeStep)}
